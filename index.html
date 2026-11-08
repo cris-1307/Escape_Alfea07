@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Winx: Escape a Alfea</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Pantalla de inicio -->
+  <section id="start" class="start" aria-label="Inicio del juego">
+    <div class="start-card">
+      <img class="start-photo" src="winx.png" alt="Las hadas Winx">
+      <p class="eyebrow">Una aventura mágica de hadas Winx</p>
+      <h1 class="title">Escape a Alfea</h1>
+      <p class="tagline">Cruza los jardines de Alfea, recoge cristales mágicos y llega al portal de Magix antes de que las Trix te alcancen.</p>
+      <button id="play" class="play">✨ Jugar</button>
+      <p class="hint">Flechas o WASD para moverte · Espacio para lanzar hechizo · M para la música</p>
+    </div>
+  </section>
+
+  <main class="app">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Una aventura mágica de hadas Winx</p>
+        <h1 class="title small">Escape a Alfea</h1>
+      </div>
+      <span class="mascot-emoji fairy-slot" aria-hidden="true"></span>
+    </header>
+
+    <section class="status" aria-label="Estado del juego">
+      <div class="stat"><span>Nivel</span><strong id="level">1 / 4</strong></div>
+      <div class="stat"><span>Vidas</span><strong id="lives">💖💖💖</strong></div>
+      <div class="stat"><span>Puntos</span><strong id="score">0</strong></div>
+      <div class="stat"><span>Cristales</span><strong id="bombs">0 / 0</strong></div>
+      <div class="stat"><span>Hechizos</span><strong id="ammo">0</strong></div>
+      <button id="sound" class="tool first" aria-label="Activar o silenciar música">🔊 Música</button>
+      <button id="next" class="tool next" hidden>Siguiente nivel ▶</button>
+      <button id="restart" class="tool">↻ Reiniciar</button>
+    </section>
+
+    <section class="game-panel">
+      <div class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="Laberinto"></div>
+      </div>
+      <aside class="legend">
+        <h2 id="levelName">Tu misión</h2>
+        <div id="message" class="message" aria-live="polite">¡Vamos! Encuentra el camino al portal de Magix. ✨</div>
+        <ul>
+          <li>🧚 Muévete con flechas, WASD, la burbuja o deslizando el dedo. Arrastra la burbuja para cambiarla de lugar.</li>
+          <li><span class="gem-slot inline"></span> Cada cristal mágico es un hechizo. <b>Espacio</b> o el botón central aturden a las Trix cercanas.</li>
+          <li>🧙‍♀️ Icy, Darcy y Stormy (las Trix) te persiguen por el camino más corto. 💤 aturdida no puede atraparte.</li>
+          <li>⚡ Los láseres se encienden y apagan cada 3 turnos.</li>
+          <li>🌀 Cada 2 cristales que recojas, el laberinto se modifica: ¡una pared cambia de lugar!</li>
+          <li>🕸️ Trampa de las Trix: pierdes el siguiente turno y suena la alerta roja.</li>
+          <li>🌟 Llega al portal mágico para pasar de nivel.</li>
+        </ul>
+      </aside>
+    </section>
+    <footer></footer>
+  </main>
+
+  <!-- Cruceta flotante: fuera del panel para que nunca se desplace ni desaparezca -->
+  <div id="pad" class="pad" aria-label="Controles de movimiento">
+          <button class="pad-btn up" data-move="up" aria-label="Arriba">▲</button>
+          <button class="pad-btn left" data-move="left" aria-label="Izquierda">◀</button>
+          <button id="throw" class="pad-btn center" aria-label="Lanzar hechizo"><span class="gem-slot"></span></button>
+          <button class="pad-btn right" data-move="right" aria-label="Derecha">▶</button>
+          <button class="pad-btn down" data-move="down" aria-label="Abajo">▼</button>
+        </div>
+
+  <!-- Game over -->
+  <section id="gameover" class="gameover" aria-live="assertive" hidden>
+    <div class="gameover-card">
+      <p class="eyebrow">Las Trix te atraparon</p>
+      <h2 class="title">Game Over</h2>
+      <p class="gameover-text">¡Te quedaste sin vidas! 🖤🖤🖤<br>Puntos: <b id="finalScore">0</b></p>
+      <button id="retry" class="play">↻ Reiniciar</button>
+    </div>
+  </section>
+
+  <!-- Final del juego -->
+  <section id="win" class="gameover win" aria-live="assertive" hidden>
+    <div class="gameover-card win-card">
+      <img class="win-photo" src="winx-final.jpg" alt="Las Winx">
+      <p class="eyebrow">¡Completaste los 4 niveles!</p>
+      <h2 class="title">¡Felicidades!</h2>
+      <p class="gameover-text">Llegaste al reino de Winx 🌟<br>Puntos: <b id="winScore">0</b></p>
+      <button id="playAgain" class="play">✨ Jugar de nuevo</button>
+    </div>
+  </section>
+
+ 
+  <!-- Capa del confeti (div normal, sin canvas) -->
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

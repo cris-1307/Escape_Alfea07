@@ -1,0 +1,143 @@
+/* Tema Winx: azules, rosas y destellos dorados.
+   Tipografía: pon el archivo ComicChick.ttf junto a este CSS para usar "Comic Chick".
+   Si no está, se usa una fuente cómic del sistema como respaldo. */
+@font-face { font-family: "Comic Chick"; src: local("Comic Chick"), url("ComicChick.ttf") format("truetype"); font-display: swap; }
+* { box-sizing: border-box; }
+:root {
+  --deep: #0c2333; --panel: #133149; --purple: #6bbbff; --lavender: #c5e3ff;
+  --pink: #ff6edb; --ink: #f2f7ff; --line: #3f6590;
+  --display: "Comic Chick", "Chalkboard SE", "Comic Neue", "Comic Sans MS", cursive;
+}
+body {
+  margin: 0; min-height: 100vh; color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 20% 0%, #335b8dcc 0, transparent 40%),
+    linear-gradient(#0c2333cc, #0c2333ee),
+    url("winx.png") center top / cover fixed,
+    var(--deep);
+}
+.app { width: min(1120px, 94vw); margin: 0 auto; padding: 22px 0 18px; }
+.eyebrow { margin: 0 0 6px; color: #b8d8ff; font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+.title { margin: 0; font-family: var(--display); font-weight: 400; line-height: 1.05; color: #fff; text-shadow: 0 0 22px #85bbff, 0 3px 0 #3984c7; }
+.title.small { font-size: clamp(1.9rem, 4.5vw, 3rem); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.mascot-emoji { display: block; height: clamp(62px, 10vw, 96px); aspect-ratio: 1; filter: drop-shadow(0 0 14px #ff6edb); animation: float 2.4s ease-in-out infinite alternate; }
+.mascot-emoji svg, .fairy-img { display: block; width: 100%; height: 100%; }
+.fairy-img { filter: drop-shadow(0 0 3px #ff9ae6); }
+@keyframes float { to { transform: translateY(-10px) rotate(4deg); } }
+
+.status { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 12px; }
+.stat { background: #18354bcc; border: 1px solid var(--line); border-radius: 14px; padding: 8px 14px; min-width: 92px; backdrop-filter: blur(6px); }
+.stat span { display: block; color: #b4cbe5; font-size: .72rem; }
+.stat strong { font-size: 1.05rem; }
+.tool { border: 1px solid #79beff; border-radius: 14px; padding: 10px 16px; font: 700 .95rem var(--display); background: #2e517f; color: #fff; cursor: pointer; touch-action: manipulation; }
+.tool.first { margin-left: auto; }
+.tool.next { background: var(--pink); color: #133252; border-color: #fff; animation: pulse 1s infinite alternate; }
+.tool[hidden], .start[hidden] { display: none; }
+.tool:hover, .play:hover { filter: brightness(1.12); }
+button:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+@keyframes pulse { to { transform: scale(1.06); } }
+
+.game-panel { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+.board-wrap { container-type: inline-size; padding: 12px; background: #091b26ee; border: 1px solid #4574a4; border-radius: 20px; box-shadow: 0 12px 40px #040b1188; touch-action: none; }
+.board { display: grid; grid-template-columns: repeat(19, 1fr); gap: 2px; width: 100%; }
+.cell { aspect-ratio: 1; display: grid; place-items: center; border-radius: 22%; font-size: 3.7cqw; line-height: 1; user-select: none; overflow: hidden; }
+.wall { background: linear-gradient(145deg, #4f80b4, #21486a); box-shadow: inset 0 0 0 1px #8bc7ff44; }
+.path { background: #132a3d; }
+.player { background: #285494; box-shadow: 0 0 12px #a5c2ff; }
+.player.shield { animation: blink .4s 3; }
+@keyframes blink { 50% { opacity: .3; } }
+.ghost { position: relative; background: #1f344e; }
+.ghost.stunned { background: #4b3a1f; }
+.trap { background: #22225e; box-shadow: inset 0 0 0 1px var(--pink); }
+.laser { background: #1b2c56; color: #ff8ae8; }
+.laser.off { opacity: .35; }
+.bomb { background: #1f3c4b; }
+/* Portal mágico de Magix */
+.exit { background: radial-gradient(circle, #fff 0, #8be8ffaa 30%, #ff6edb66 60%, transparent 78%), linear-gradient(#2b6fd0, #3c5eab); border: 2px solid #ffd34d; box-shadow: 0 0 16px #8be8ff, inset 0 0 8px #ffd34d88; }
+.board.portal .exit { background: radial-gradient(circle, #fff 0, #8be8ffaa 30%, #ff6edb66 60%, transparent 78%), linear-gradient(#2b6fd0, #3c5eab); border: 2px solid #ffd34d; box-shadow: 0 0 16px #8be8ff, inset 0 0 8px #ffd34d88; }
+@keyframes stage { to { box-shadow: 0 0 30px #fff, 0 0 12px #ff6edb; filter: brightness(1.5); } }
+
+/* Cristal mágico dibujado con código (SVG creado en script.js) */
+.gem-img { height: 92%; width: auto; aspect-ratio: 1; filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 6px #ff6edb); }
+
+/* Cruceta: burbuja con izquierda, derecha, arriba, abajo y centro = atacar */
+.pad { --b: 56px; position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 5; cursor: grab; opacity: .95; display: grid; grid-template-columns: repeat(3, var(--b)); grid-template-rows: repeat(3, var(--b)); gap: 4px; width: max-content; margin: 0; padding: 14px; border-radius: 50%; background: radial-gradient(circle, #23405fcc 0, #102839cc 100%); border: 2px solid #79beff88; box-shadow: 0 0 26px #6bbbff77, inset 0 0 18px #85bbff33; backdrop-filter: blur(8px); touch-action: none; user-select: none; -webkit-user-select: none; }
+.pad-btn { display: grid; place-items: center; border: 0; padding: 0; color: #fff; font-size: 1.25rem; background: linear-gradient(145deg, #4c94d3, #285988); box-shadow: 0 3px 0 #133252; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; }
+.pad-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #133252; filter: brightness(1.25); }
+.pad-btn.up { grid-area: 1 / 2; border-radius: 16px 16px 4px 4px; }
+.pad-btn.left { grid-area: 2 / 1; border-radius: 16px 4px 4px 16px; }
+.pad-btn.right { grid-area: 2 / 3; border-radius: 4px 16px 16px 4px; }
+.pad-btn.down { grid-area: 3 / 2; border-radius: 4px 4px 16px 16px; }
+.pad-btn.center { grid-area: 2 / 2; border-radius: 50%; padding: 6px; background: radial-gradient(circle at 35% 30%, #ffb3fa, #5882e3 70%); box-shadow: 0 0 16px #ff6edbaa, 0 3px 0 #133252; }
+.pad-btn.center .gem-slot { height: 100%; }
+
+/* Game over */
+.gameover { position: fixed; inset: 0; z-index: 15; display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at center, #3b102ecc, #040b11ee); backdrop-filter: blur(4px); }
+.gameover[hidden] { display: none; }
+.gameover-card { width: min(460px, 100%); text-align: center; padding: 28px 22px; border: 2px solid var(--pink); border-radius: 24px; background: #133149f2; box-shadow: 0 0 40px #ff6edb88; animation: pop .35s ease-out; }
+.gameover .title { font-size: clamp(2.6rem, 11vw, 4.2rem); text-shadow: 0 0 22px #ff6edb, 0 3px 0 #a52c65; }
+.gameover-text { margin: 14px 0 22px; font-size: 1.1rem; line-height: 1.6; color: #dff0ff; }
+@keyframes pop { from { transform: scale(.7); opacity: 0; } }
+
+/* Confeti hecho con <span> animados por CSS (sin canvas) */
+.confetti { overflow: hidden; }
+.confetti-piece { position: absolute; border-radius: 1px; will-change: transform, opacity; }
+.confetti-piece.rain { animation: confetti-move linear forwards; }
+.confetti-piece.burst { animation: confetti-move ease-out forwards; }
+@keyframes confetti-move { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); } }
+.confetti { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; }
+
+.legend { background: #152e43dd; border: 1px solid var(--line); border-radius: 20px; padding: 16px; }
+.legend h2 { margin: 0 0 10px; font: 400 1.35rem var(--display); }
+.legend ul { margin: 14px 0 0; padding-left: 18px; font-size: .88rem; line-height: 1.45; color: #cad9eb; }
+.legend li { margin: 8px 0; }
+.gem-slot { display: inline-grid; place-items: center; }
+.gem-slot svg { height: 100%; width: auto; display: block; }
+.gem-slot.inline { height: 1.4em; vertical-align: -.3em; }
+.message { min-height: 62px; padding: 12px; border-radius: 12px; background: #23405f; font-weight: 700; }
+/* Regla C: al pisar una trampa el fondo de la pantalla se pone rojo durante esa ronda */
+body.alert { background: radial-gradient(circle at center, #e01b24, #7a0a12 65%, #3a0508); }
+body.alert .message { background: #b3121c; }
+footer { margin-top: 14px; text-align: center; font-size: .78rem; color: #94aac6; }
+
+/* Pantalla de inicio */
+.start { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 16px; overflow-y: auto; isolation: isolate; background: var(--deep); }
+.start::before { content: ""; position: fixed; inset: -20px; z-index: -1; background: linear-gradient(#0c233355, #0c2333cc), url("winx.png") center / cover; filter: blur(16px); }
+.start-photo { display: block; margin: 0 auto 14px; width: auto; max-width: 100%; max-height: 52vh; object-fit: contain; border-radius: 20px; border: 3px solid #fff; box-shadow: 0 0 34px #ff6edbcc, 0 0 70px #4fc3ff66; }
+.start-card { width: min(640px, 100%); text-align: center; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.start .title { font-size: clamp(2.6rem, 9vw, 5rem); }
+.tagline { margin: 12px auto 20px; max-width: 520px; color: #dff0ff; line-height: 1.45; }
+.play { border: 2px solid #fff; border-radius: 999px; padding: 14px 44px; font: 400 1.7rem var(--display); color: #133252; background: linear-gradient(#ffb3fa, #9bc6ff); box-shadow: 0 0 28px #9bc6ffaa; cursor: pointer; touch-action: manipulation; }
+.play:active { transform: scale(.96); }
+.hint { margin: 16px 0 0; font-size: .8rem; color: #b4cbe5; }
+
+@media (max-width: 860px) {
+  .game-panel { grid-template-columns: 1fr; }
+  .app { padding-bottom: 240px; }
+  .pad { --b: 58px; }
+  .tool.first { margin-left: 0; }
+  }
+@media (max-width: 520px) {
+  .app { padding-top: 12px; }
+  .stat { min-width: 0; flex: 1 1 28%; }
+  .board-wrap { padding: 6px; border-radius: 14px; }
+  .board { gap: 1px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+/* Las Trix */
+.trix-img { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 3px #ff4d9a); }
+.trix-img.stunned { filter: grayscale(.8) brightness(.7); opacity: .75; }
+.zzz { position: absolute; top: 0; right: 2%; font-size: .36em; line-height: 1; }
+
+/* Pantalla final */
+.win { background: radial-gradient(circle at center, #2b4fa8cc, #080b24f0); }
+.win-card { width: min(640px, 100%); max-height: 96vh; overflow-y: auto; border-color: #ffd34d; box-shadow: 0 0 40px #ffd34d88, 0 0 90px #ff6edb66; }
+.win-photo { display: block; width: auto; max-width: 100%; max-height: 44vh; object-fit: contain; margin: 0 auto 14px; border-radius: 16px; border: 3px solid #fff; }
+.win .title { text-shadow: 0 0 22px #ffd34d, 0 3px 0 #c78a00; }
+
+/* Regla B: las casillas que cambian brillan un instante (el tablero no se mueve) */
+.cell.changed { animation: changed 1.2s ease-out; }
+@keyframes changed { from { box-shadow: 0 0 0 2px #ffd34d, 0 0 14px #ff6edb; filter: brightness(1.8); } }
